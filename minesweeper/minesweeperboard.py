@@ -1,5 +1,5 @@
 #    Minesweeper
-#    Copyright (C) 2020  Deidre House
+#    Copyright (C) 2020 Deidre House
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -13,25 +13,6 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see https://www.gnu.org/licenses/.
-
-import random
-from builtins import input # Python 2 & 3 cross-compatibility
-from msvcrt import getch
-import pickle
-import os
-
-_savefile_extension = ".minesweeper"
-
-def clear():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-def generate_board(w,h,m):
-    """Generate a minesweeper board of size (w,h) with m (random) mines"""
-    board = fill_board(w,h)
-    locations = random.sample(range(w*h),m)
-    for location in locations:
-        board[location // w][location % w] = True
-    return board
 
 def fill_board(w,h,x=False):
     """Initialize a blank board"""
@@ -163,61 +144,6 @@ space - flag/unflag cell
 h - display/hide help
 q - quit game
 s - save game"""
-    
-    def play(self):
-        show_help = False
-        clear()
-        print("Mines remaining: {}".format(self.mine_count - self.flag_count))
-        print(self)
-        
-        while not (self.won or self.boom):
-            print("Current location: ({0},{1})   ".format(self.cursor[0]+1,self.cursor[1]+1))
-            if show_help:
-                print(self.helpmessage)
-            k = ord(getch())
-            # arrow key:
-            if k == 224:
-                d = ord(getch())
-                # up arrow:
-                if d == 72:
-                    self.cursor[0] = max(0, self.cursor[0] - 1)
-                elif d == 75:
-                    self.cursor[1] = max(0, self.cursor[1] - 1)
-                elif d == 77:
-                    self.cursor[1] = min(self.cols - 1,
-                                         self.cursor[1] + 1)
-                elif d == 80:
-                    self.cursor[0] = min(self.rows - 1 ,
-                                         self.cursor[0] + 1)
-            elif k == 32:
-                self.mark(*self.cursor)
-            elif k == 13:
-                self.select(*self.cursor)
-            elif k in [81, 113]:
-                print("Sure you want to quit? (y/n)")
-                k2 = ord(getch())
-                if k2 in [89, 121]:
-                    self.detonate()
-                elif k2 in [0, 244]:
-                    getch()
-            elif k in [72, 104]:
-                #help message
-                show_help = not show_help
-            elif k in [83, 115]:
-                # save game
-                savename = input("Save game as:")
-                with open(savename + _savefile_extension, 'wb') as f:
-                    pickle.dump(self, f, protocol=2)                
-            elif k == 0:
-                getch()
-            clear()
-            print("Mines remaining: {}".format(self.mine_count - self.flag_count))
-            print(self)
-        
-        if self.won:
-            print("You win!")
-        elif self.boom:
-            print("BOOM! game over.")
 
 class SquareBoard(MinesweeperBoard):
     
